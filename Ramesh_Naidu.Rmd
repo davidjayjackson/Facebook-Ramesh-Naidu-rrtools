@@ -1,0 +1,67 @@
+---
+title: "Ramesh Naidu"
+author: "IllicitDavid Jackson"
+date: "3/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+## Install Packages Once (Watch for Errors)
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("ggplot2")
+# install.packages("scales")
+# install.packages("dplyr" )
+# install.packages("forecast")
+# install.packages("rmarkdown")
+## Load Library
+library(ggplot2)
+library(scales)
+library(dplyr)
+library(forecast)
+```
+```{r}
+rm(list=ls())
+df <- read.csv("./StatsServicesExport.csv")
+df$SampleDate <- as.Date(df$SampleDate)
+df$DateofBirth <- as.Date(df$DateofBirth)
+df$USDate <- as.Date(df$USDate)
+
+```
+### Count of Smoking/Non and Unknown
+
+```{r}
+df$SmokingGroup = ifelse((df$Smoking=="0"), "No","Unknown")
+df$SmokingGroup = ifelse((df$Smoking=="1"), "Yes",df$SmokingGroup)
+
+
+smokers <- df %>% group_by(SmokingGroup) %>% summarise(
+  Count = n()
+) 
+```
+```{r}
+smokers <- as.data.frame(smokers)
+ggplot(smokers) + geom_col(aes(x=SmokingGroup,y=Count)) + scale_y_log10(labels=comma) +
+  labs(title="Count of Smoker/non-smoker",y="Total Number of Women")
+
+```
+
+### Plot of Ethnicity
+
+```{r}
+#Ethnic Group classification
+df$EthnicGroup = ifelse((df$Ethnicity=="51"), "Afro-Caribbean","Unknown")
+df$EthnicGroup = ifelse((df$Ethnicity=="52"), "Asian",df$EthnicGroup)
+df$EthnicGroup = ifelse((df$Ethnicity=="53"),"Caucasian",df$EthnicGroup)
+df$EthnicGroup = ifelse((df$Ethnicity=="0"),"Default",df$EthnicGroup)
+df$EthnicGroup = ifelse((df$Ethnicity=="54"),"Oriental",df$EthnicGroup)
+df$EthnicGroup = ifelse((df$Ethnicity=="60"),"Other",df$EthnicGroup)
+```
+```{r}
+ethnic <- df %>% select(EthnicGroup) %>% group_by(EthnicGroup) %>%
+  summarise(Count = n()) 
+ethnic <- as.data.frame(ethnic)
+ggplot(ethnic) + geom_col(aes(reorder(EthnicGroup,Count),y=Count)) + coord_flip() +
+  scale_y_log10(labels=comma) + labs(title="Count by Ethnic Group")
+
+```
+
