@@ -1,13 +1,14 @@
 ---
-title: "Ramesh Naidu"
-author: "IllicitDavid Jackson"
+title: "Case Study:1"
+author: "Ramesh Naidu"
 date: "3/3/2021"
-output: html_document
+output:
+   html_document: default
 ---
 
 ```{r setup, include=FALSE}
 ## Install Packages Once (Watch for Errors)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,error=FALSE,message = FALSE,warning = FALSE)
 # install.packages("ggplot2")
 # install.packages("scales")
 # install.packages("dplyr" )
@@ -18,15 +19,19 @@ library(ggplot2)
 library(scales)
 library(dplyr)
 library(forecast)
+library(janitor)
+
 ```
 ```{r}
 rm(list=ls())
-df <- read.csv("./StatsServicesExport.csv")
+
+df <- read.csv("./StatsServicesExport.csv") %>% remove_empty()
 df$SampleDate <- as.Date(df$SampleDate)
 df$DateofBirth <- as.Date(df$DateofBirth)
 df$USDate <- as.Date(df$USDate)
 
 ```
+
 ### Count of Smoking/Non and Unknown
 
 ```{r}
@@ -41,7 +46,7 @@ smokers <- df %>% group_by(SmokingGroup) %>% summarise(
 ```{r}
 smokers <- as.data.frame(smokers)
 ggplot(smokers) + geom_col(aes(x=SmokingGroup,y=Count)) + scale_y_log10(labels=comma) +
-  labs(title="Count of Smoker/non-smoker",y="Total Number of Women")
+  labs(title="Count of Smoker/non-smoker",y="Total Number of Women(log10)")
 
 ```
 
@@ -61,7 +66,63 @@ ethnic <- df %>% select(EthnicGroup) %>% group_by(EthnicGroup) %>%
   summarise(Count = n()) 
 ethnic <- as.data.frame(ethnic)
 ggplot(ethnic) + geom_col(aes(reorder(EthnicGroup,Count),y=Count)) + coord_flip() +
-  scale_y_log10(labels=comma) + labs(title="Count by Ethnic Group")
+  scale_y_log10(labels=comma) + labs(title="Count by Ethnic Group",y="Ethnic",x="Count(log10)")
 
 ```
+
+####  Maternal Weight Distribution
+
+```{r}
+df$GAweek <-  floor(df$GestationalAge/7)
+df$Weight <- floor(df$Weight/10) *10 
+```
+```{r}
+GAP <- df %>% group_by(GAweek) %>% summarise(
+  Median = median(Weight),
+  Mean = mean(Weight),
+  Sd = sd(Weight),
+  Min = min(Weight),
+  Max = max(Weight)
+
+) %>%  filter(Median >0)
+
+```
+```{r}
+GAP <- as.data.frame(GAP)
+GAP  %>% DT::datatable() %>%   DT::formatRound(2:6,digits=1)
+
+
+```
+
+```{r}
+
+ggplot(df) + geom_histogram(aes(x=Weight),bin=10) +
+  labs(title=" Maternal Weight Distribution")
+```
+
+#### Count of Number of Gestational Weeks 
+
+```{r}
+xtabs(~df$GAweek) 
+```
+
+#### Orignal HCGb MOMs by Gestational Week
+
+```{r}
+ggplot(df) + geom_col(aes(x=GAweek,y=HCGbMoM,col=HCGbMoM)) +
+  scale_y_continuous(labels=comma)
+  labs(title="HCGb MOMs by Gestational Week") 
+```
+
+```{r}
+ggplot(df) + geom_errorbar(aes(x=GAweek,ymin=min(HCGbMoM),ymax=max(HCGbMoM)),width=.2) +
+  scale_y_continuous(labels=comma)
+  labs(title="HCGb MOMs by Gestational Week") 
+```
+```{r}
+A <-df %>% select(GAweek,HCGbMoM) %>% top_n(50)
+write.csv(A,"A.csv",row.names = FALSE)
+```
+
+
 
