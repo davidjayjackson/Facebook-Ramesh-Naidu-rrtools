@@ -15,6 +15,7 @@ library(janitor)
 library(dlookr)
 library(DT)
 library(flextable)
+options(digits = 2)
 ```
 
 # Level Intro to R, RStudio and Rmarkdown
@@ -37,7 +38,7 @@ df$USDate <- as.Date(df$USDate)
 
 
 ```{r}
-df %>% select(AgeatEDD:Weight )%>% diagnose_numeric() %>% flextable()
+df %>% select(AgeatEDD:Weight )%>% diagnose_numeric() %>% flextable() 
 ```
 
 ## Count of Smoking/Non and Unknown
@@ -59,9 +60,6 @@ ggplot(smokers) + geom_col(aes(x=SmokingGroup,y=Count)) + scale_y_log10() +
 
 ```
 
-## The End
 
-```{r}
 
-```
 
