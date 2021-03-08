@@ -14,6 +14,8 @@ knitr::opts_chunk$set(echo = TRUE,error=FALSE,message = FALSE,warning = FALSE)
 # install.packages("dplyr" )
 # install.packages("forecast")
 # install.packages("rmarkdown")
+#install.packages("DT")
+#install.packages(janitor)
 ## Load Library
 library(ggplot2)
 library(scales)
@@ -35,14 +37,15 @@ df$USDate <- as.Date(df$USDate)
 ### Count of Smoking/Non and Unknown
 
 ```{r}
-df$SmokingGroup = ifelse((df$Smoking=="0"), "No","Unknown")
-df$SmokingGroup = ifelse((df$Smoking=="1"), "Yes",df$SmokingGroup)
+df$SmokingGroup <- ifelse((df$Smoking=="0"), "No","Unknown")
+df$SmokingGroup <- ifelse((df$Smoking=="1"), "Yes",df$SmokingGroup)
 
 
 smokers <- df %>% group_by(SmokingGroup) %>% summarise(
   Count = n()
 ) 
 ```
+
 ```{r}
 smokers <- as.data.frame(smokers)
 ggplot(smokers) + geom_col(aes(x=SmokingGroup,y=Count)) + scale_y_log10(labels=comma) +
@@ -61,6 +64,7 @@ df$EthnicGroup = ifelse((df$Ethnicity=="0"),"Default",df$EthnicGroup)
 df$EthnicGroup = ifelse((df$Ethnicity=="54"),"Oriental",df$EthnicGroup)
 df$EthnicGroup = ifelse((df$Ethnicity=="60"),"Other",df$EthnicGroup)
 ```
+
 ```{r}
 ethnic <- df %>% select(EthnicGroup) %>% group_by(EthnicGroup) %>%
   summarise(Count = n()) 
@@ -115,13 +119,14 @@ ggplot(df) + geom_col(aes(x=GAweek,y=HCGbMoM,col=HCGbMoM)) +
 ```
 
 ```{r}
-ggplot(df) + geom_errorbar(aes(x=GAweek,ymin=min(HCGbMoM),ymax=max(HCGbMoM)),width=.2) +
-  scale_y_continuous(labels=comma)
-  labs(title="HCGb MOMs by Gestational Week") 
-```
-```{r}
-A <-df %>% select(GAweek,HCGbMoM) %>% top_n(50)
-write.csv(A,"A.csv",row.names = FALSE)
+df %>% 
+  group_by(GAweek = as.factor(GAweek)) %>% 
+  summarise(min_hcgbmom = min(HCGbMoM), max_hcgbmom = max(HCGbMoM)) %>% 
+  ggplot() + 
+  geom_errorbar(
+    aes(x = GAweek, ymin = min_hcgbmom, ymax = max_hcgbmom),
+    width = .2
+  )
 ```
 
 
