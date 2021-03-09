@@ -22,6 +22,7 @@ library(scales)
 library(dplyr)
 library(forecast)
 library(janitor)
+options(digits = 2)
 
 ```
 ```{r}

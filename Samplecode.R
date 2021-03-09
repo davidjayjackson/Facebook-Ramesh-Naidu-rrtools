@@ -179,20 +179,20 @@ AllData[,"Diff.PlGF"]=AllData[,"Re.MoM.PlGF"]-AllData[,"PlGFMoM"]
 AllData[,"Re.MoM.NT"]=AllData[,"NT"]/defaultNT(AllData[,"CRL"])
 AllData[,"Diff.NT"]=AllData[,"Re.MoM.NT"]-AllData[,"NTMoM"]
 
-max(abs(AllData[AllData$SampleDate > timeDate("6/30/2018"),"Diff.PAPPA"]),na.rm=T)
-AllData[AllData$SampleDate > timeDate("6/30/2018") & abs(AllData$Diff.PAPPA) >0.001 & is.na(AllData$Diff.PAPPA)==F ,]
-max(abs(AllData[AllData$SampleDate > timeDate("6/30/2018"),"Diff.HCGb"]),na.rm=T)
-AllData[AllData$SampleDate > timeDate("6/30/2018") & abs(AllData$Diff.HCGb) >0.001 & is.na(AllData$Diff.HCGb)==F ,]
-max(abs(AllData[AllData$SampleDate > timeDate("6/30/2018"),"Diff.AFP"]),na.rm=T)
-AllData[AllData$SampleDate > timeDate("6/30/2018") & abs(AllData$Diff.AFP) >0.001 & is.na(AllData$Diff.AFP)==F ,]
-max(abs(AllData[AllData$SampleDate > timeDate("6/30/2018"),"Diff.uE3"]),na.rm=T)
-AllData[AllData$SampleDate > timeDate("6/30/2018") & abs(AllData$Diff.uE3) >0.001 & is.na(AllData$Diff.uE3)==F ,]
-max(abs(AllData[AllData$SampleDate > timeDate("6/30/2018"),"Diff.Inhibin"]),na.rm=T)
-AllData[AllData$SampleDate > timeDate("6/30/2018") & abs(AllData$Diff.Inhibin) >0.0001 & is.na(AllData$Diff.Inhibin)==F,]
-max(abs(AllData[AllData$SampleDate > timeDate("6/30/2018"),"Diff.PlGF"]),na.rm=T)
-AllData[AllData$SampleDate > timeDate("6/30/2018") & abs(AllData$Diff.PlGF) >0.001 & is.na(AllData$Diff.PlGF)==F ,]
-max(abs(AllData[AllData$SampleDate > timeDate("6/30/2018"),"Diff.NT"]),na.rm=T)
-AllData[AllData$SampleDate > timeDate("6/30/2018") & abs(AllData$Diff.NT) >0.001 & is.na(AllData$Diff.NT)==F ,]
+max(abs(AllData[AllData$SampleDate > as.Date("06-30-2018"),"Diff.PAPPA"]),na.rm=T)
+AllData[AllData$SampleDate > as.Date("6/30/2018") & abs(AllData$Diff.PAPPA) >0.001 & is.na(AllData$Diff.PAPPA)==F ,]
+max(abs(AllData[AllData$SampleDate > as.Date("6/30/2018"),"Diff.HCGb"]),na.rm=T)
+AllData[AllData$SampleDate > as.Date("6/30/2018") & abs(AllData$Diff.HCGb) >0.001 & is.na(AllData$Diff.HCGb)==F ,]
+max(abs(AllData[AllData$SampleDate > as.Date("6/30/2018"),"Diff.AFP"]),na.rm=T)
+AllData[AllData$SampleDate > as.Date("6/30/2018") & abs(AllData$Diff.AFP) >0.001 & is.na(AllData$Diff.AFP)==F ,]
+max(abs(AllData[AllData$SampleDate > as.Date("6/30/2018"),"Diff.uE3"]),na.rm=T)
+AllData[AllData$SampleDate > as.Date("6/30/2018") & abs(AllData$Diff.uE3) >0.001 & is.na(AllData$Diff.uE3)==F ,]
+max(abs(AllData[AllData$SampleDate > as.Date("6/30/2018"),"Diff.Inhibin"]),na.rm=T)
+AllData[AllData$SampleDate > as.Date("6/30/2018") & abs(AllData$Diff.Inhibin) >0.0001 & is.na(AllData$Diff.Inhibin)==F,]
+max(abs(AllData[AllData$SampleDate > as.Date("6/30/2018"),"Diff.PlGF"]),na.rm=T)
+AllData[AllData$SampleDate > as.Date("6/30/2018") & abs(AllData$Diff.PlGF) >0.001 & is.na(AllData$Diff.PlGF)==F ,]
+max(abs(AllData[AllData$SampleDate > as.Date("6/30/2018"),"Diff.NT"]),na.rm=T)
+AllData[AllData$SampleDate > as.Date("6/30/2018") & abs(AllData$Diff.NT) >0.001 & is.na(AllData$Diff.NT)==F ,]
 
 #create weight categories
 wbreakPoints =  c( seq( from=30,to=120,by=10) ,150 )

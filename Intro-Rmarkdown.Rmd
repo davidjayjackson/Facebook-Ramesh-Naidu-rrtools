@@ -15,6 +15,7 @@ library(janitor)
 library(dlookr)
 library(DT)
 library(flextable)
+library(lubridate)
 options(digits = 2)
 ```
 
@@ -60,6 +61,35 @@ ggplot(smokers) + geom_col(aes(x=SmokingGroup,y=Count)) + scale_y_log10() +
 
 ```
 
+## Table 1: 1Sample sizes by gestational weeks
+
+
+```{r}
+df$GAweek <-  floor(df$GestationalAge/7) 
+table(df$GAweek)
+```
+
+## Table 2:  Sample sizes by month and Year
+
+```{r}
+df$MY <- format(df$SampleDate, "%Y-%m")
+year_month <- as.data.frame( table(df$MY))
+ggplot(year_month) + geom_col(aes(x=Var1,y=Freq)) + coord_flip() +
+  labs(title="Count of Samples by month and Year",x="Year/Month",y="Count of Samples")
+
+```
+
+
+## Table 1 Sample sizes by weight groups
+
+```{r}
+df$Weight <- floor(df$Weight/10) *10 
+
+table(df$Weight)
+
+```
+
+## Table 1 Ethnic distribution
 
 
 
